@@ -4,11 +4,12 @@ public class Cuenta {
 
     public static void main(String[] args) {
 
-        int[] cuenta = {1000001, 1000002,1000003};
+        int[] cuenta = {1000001,1000002,1000003};
+        //int[] cuenta = {1,2,3}; cuentas de pruebas
         double[] saldo = {400, 200, 500};
         int cuentaPrueba = 0;
         boolean continuar = true;
-        double retiro;
+        double movimiento;
         int transferencia = 0;
 
 
@@ -18,6 +19,7 @@ public class Cuenta {
             }
             catch (Exception e){
                 JOptionPane.showMessageDialog(null,"Por favor ingrese valores numericos, esa cuenta no existe");
+                cuentaPrueba = 0;
             }
             for (int i = 0; i < cuenta.length; i++){
                 if(cuentaPrueba == cuenta[i]){
@@ -36,50 +38,52 @@ public class Cuenta {
                                 break;
                             case 2:
                                 try {
-                                    retiro = Double.parseDouble(JOptionPane.showInputDialog("Cuanto desea retirar $"));
+                                    movimiento = Double.parseDouble(JOptionPane.showInputDialog("Cuanto desea retirar $"));
                                 }
                                 catch (Exception e){
                                     JOptionPane.showMessageDialog(null,"Por favor ingrese valores ,monetarios");
                                     break;
                                 }
-                                if (saldo[i]<retiro){
-                                    JOptionPane.showMessageDialog(null,"Lo sentimos usted posee $"+saldo[i]+" por ende no puede retirar "+retiro);
-                                }
-                                else{
+                                if (saldo[i]<movimiento){
+                                    JOptionPane.showMessageDialog(null,"Lo sentimos usted posee $"+saldo[i]+" por ende no puede retirar "+movimiento);
+                                } else if (movimiento <= 0) {
+                                    JOptionPane.showMessageDialog(null,"Lo sentimos usted no puede retirar un valor negativo");
+                                } else{
                                     JOptionPane.showMessageDialog(null,"Proceso exitoso ");
-                                    saldo[i] = saldo[i] - retiro;
+                                    saldo[i] = saldo[i] - movimiento;
                                     JOptionPane.showMessageDialog(null,"El saldo actual de la cuenta ****** es de $"+saldo[i]+"*******’");
                                 }
                                 break;
                             case 3:
                                 try {
-                                    retiro = Double.parseDouble(JOptionPane.showInputDialog("Cuanto desea consignar $"));
+                                    movimiento = Double.parseDouble(JOptionPane.showInputDialog("Cuanto desea consignar $"));
                                 }
                                 catch (Exception e){
                                     JOptionPane.showMessageDialog(null,"Por favor ingrese valores ,monetarios");
                                     break;
                                 }
-                                if (saldo[i]<retiro){
-                                    JOptionPane.showMessageDialog(null,"Lo sentimos usted posee $"+saldo[i]+" por ende no puede consignar "+retiro);
+                                if (movimiento <= 0){
+                                    JOptionPane.showMessageDialog(null,"Lo sentimos usted usted no puede consignar valores negativos");
                                 }
                                 else{
                                     JOptionPane.showMessageDialog(null,"Proceso exitoso ");
-                                    saldo[i] = saldo[i] - retiro;
+                                    saldo[i] = saldo[i] + movimiento;
                                     JOptionPane.showMessageDialog(null,"El saldo actual de la cuenta ****** es de $"+saldo[i]+"*******’");
                                 }
                                 break;
                             case 4:
                                 try {
-                                    retiro = Double.parseDouble(JOptionPane.showInputDialog("Cuanto desea Transferir $"));
+                                    movimiento = Double.parseDouble(JOptionPane.showInputDialog("Cuanto desea Transferir $"));
                                 }
                                 catch (Exception e){
                                     JOptionPane.showMessageDialog(null,"Por favor ingrese valores ,monetarios");
                                     break;
                                 }
-                                if (saldo[i]<retiro){
-                                    JOptionPane.showMessageDialog(null,"Lo sentimos usted posee $"+saldo[i]+" por ende no puede transferir "+retiro);
-                                }
-                                else{
+                                if (saldo[i]<movimiento){
+                                    JOptionPane.showMessageDialog(null,"Lo sentimos usted posee $"+saldo[i]+" por ende no puede transferir "+movimiento);
+                                } else if (movimiento <= 0) {
+                                    JOptionPane.showMessageDialog(null,"Lo sentimos usted no puede transferir un valor negativo");
+                                } else{
                                     try {
                                         transferencia = Integer.parseInt(JOptionPane.showInputDialog("A que cuenta desea transferir"));
                                     }
@@ -89,14 +93,14 @@ public class Cuenta {
                                     for (int y = 0; y < cuenta.length ; y++){
                                         if (cuenta[y] == transferencia){
                                             JOptionPane.showMessageDialog(null,"Proceso exitoso ");
-                                            saldo[i]=saldo[i]-retiro;
-                                            saldo[y]=saldo[y]+retiro;
+                                            saldo[i]=saldo[i]-movimiento;
+                                            saldo[y]=saldo[y]+movimiento;
                                             JOptionPane.showMessageDialog(null,"El saldo actual de la cuenta ****** es de $"+saldo[i]+"*******’");
+                                            y = cuenta.length;
+                                        }else if (y >= (cuenta.length - 1)){
+                                            JOptionPane.showMessageDialog(null,"Lo sentimos esa cuenta no existe, lo regresaremos al menu");
                                         }
-                                        System.out.println(y);
-                                        if(y == 3) {
-                                            JOptionPane.showMessageDialog(null,"Lo sentimos esa cuenta no existe");
-                                        }
+
                                     }
                                 }
                                 break;
@@ -105,13 +109,29 @@ public class Cuenta {
                                 continuar = false;
                                 break;
                             default:
+                                JOptionPane.showMessageDialog(null,"Favor de ingresar valores que esten propios en la aplicacion");
                                 break;
                         }
                     }while (continuar == true);
+                    i = cuenta.length;
+                    int replaced = JOptionPane.showConfirmDialog(null,"Desea hacer alguna operacion mas en otra cuenta?");
+                    switch (replaced) {
+                        case JOptionPane.CANCEL_OPTION:
+                            continuar = false;
+                            break;
+                        case JOptionPane.CLOSED_OPTION:
+                            continuar = false;
+                            break;
+                        case JOptionPane.NO_OPTION:
+                            continuar = false;
+                            break;
+                        case JOptionPane.YES_OPTION:
+                            continuar = true;
+                            break;
+                    }
                 }
-                else {
+                else if(i >= (cuenta.length - 1) && cuentaPrueba != 0) {
                     JOptionPane.showMessageDialog(null,"Lo sentimos esa cuenta no existe, intentelo nuevamente");
-                    break;
                 }
             }
         }while (continuar == true);
